@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.ai.appointment',
-  appName: 'AI Appointment',
+  appId: 'com.Ai.Friday',
+  appName: 'Friday',
   webDir: 'dist'
 };
 
