@@ -19,24 +19,34 @@ export default function App() {
     });
   };
 
-  const processCommand = async (text: string) => {
-    // 🔥 AUTO BOOK LOGIC
-    const lower = text.toLowerCase();
+  import { extractDateTime } from "./utils";
 
-    if (
-      lower.includes("book") &&
-      lower.includes("appointment")
-    ) {
-      const appointment = `Appointment booked on ${new Date().toLocaleString()}`;
+const processCommand = async (text: string) => {
+  const lower = text.toLowerCase();
 
-      setAppointments((prev) => [...prev, appointment]);
+  // 🔥 SMART BOOKING
+  if (lower.includes("appointment") || lower.includes("meeting")) {
+    const date = extractDateTime(text);
 
-      const reply = "[happy] Your appointment has been booked successfully!";
-      setResponses((prev) => [...prev, reply]);
+    const appointment = `📅 Appointment on ${date.toLocaleString()}`;
 
-      await speak(reply);
-      return;
-    }
+    setAppointments((prev) => [...prev, appointment]);
+
+    const reply = `[happy] Your appointment is booked for ${date.toLocaleString()}`;
+
+    setResponses((prev) => [...prev, reply]);
+
+    await speak(reply);
+    return;
+  }
+
+  // 🧠 AI fallback
+  const result = await aatEngine.process(text);
+
+  setResponses((prev) => [...prev, result]);
+
+  await speak(result);
+};
 
     // 🧠 AI RESPONSE
     const result = await aatEngine.process(text);
